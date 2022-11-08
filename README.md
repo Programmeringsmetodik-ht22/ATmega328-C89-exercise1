@@ -1,5 +1,5 @@
 # ATmega328-C89-exercise1
-C89 implementation för microcontroller ATmega328P - includes dynamic memory allocation, function like macros and vtables.
+C89 implementation for microcontroller ATmega328P - includes dynamic memory allocation, function like macros and vtables.
 
 Objective:
 a) Replace function like macros for the led array (in "led_array.h") with corresponding functions.
