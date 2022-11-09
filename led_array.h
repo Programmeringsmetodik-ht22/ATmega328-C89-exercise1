@@ -20,8 +20,7 @@
 
 /********************************************************************************
 * led_array_delete: Tömmer dynamisk array av angiven storlek. Lysdioderna
-*                   lagrade i arrayen måste dock nollställas via anrop av
-*                   funktionen led_array_clear_content om detta ska ske. 
+*                   lagrade i arrayen måste dock nollställas manuellt.
 *                   Adressen till den pekare som pekar på arrayen passeras för
 *                   att både kunna frigöra minnet och sätta pekaren till null.
 *
@@ -30,23 +29,6 @@
 #define led_array_delete(self) ({ \
    free(*self); \
    *self = 0; \
-})
-
-/********************************************************************************
-* led_array_clear_content: Nollställer innehållet (lysdioderna) i angiven array.
-*                          Arrayen i fråga nollställs dock inte och dess storlek 
-*                          ändras inte. För att nollställa arrayen, anropa 
-*                          funktionen led_array_delete.
-*
-*                          - self: Adressen till den pekare som pekar på arrayen.
-*                          - size: Arrayens storlek, dvs. antalet lysdioder 
-*                                  i arrayen.
-********************************************************************************/
-#define led_array_clear_content(self, size) ({ \
-   struct led_t** i; \
-   for (i = 0; i < size; ++i) { \
-      led_clear(*i); \
-   } \
 })
 
 /********************************************************************************
@@ -102,8 +84,8 @@
 #define led_array_pop(self, size) ({ \
    int ret_val = 0; \
    if ((*size) <= 1) { \
-      led_array(*self); \
-      (*size) = 0; \
+      led_array_delete(self); \
+      *size = 0; \
    } else { \
       led_t** copy = (led_t**)realloc(self, sizeof(led_t*) * (*size - 1)); \
       if (!copy) ret_val = 1; \
